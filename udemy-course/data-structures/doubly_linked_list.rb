@@ -1,7 +1,15 @@
 # Each node has a next node and a previous node
 # Means it's more efficient for some operations compared to singly linked list
-# Drawback - more memory! More memory == more flexibility
 
+# Big O Notation:
+# Insertion - O(1) (same as singly)
+# Removal - O(1) (better than singly)
+# Searching - O(N) (better - n/2)
+# Access - O(N) (same)
+
+# If you need to access data in a reverse manner (e.g. browser history), v. good compared to singly linked list
+# Better for finding nodes - done in half time
+# Drawback - more memory! More memory == more flexibility
 
 class Node
 
@@ -103,23 +111,75 @@ class DoublyLinkedList
     return self
   end
 
-  def get(index)
-    if index < 0 || index >= self.length
+  def get(idx)
+    if idx < 0 || idx >= self.length
       return nil
     end
-    # either start at beginning or end depending on index. Halves search time
-    if index < (self.length) / 2
+    # either start at beginning or end depending on idx. Halves search time
+    if idx < (self.length) / 2
       node = self.head
-      for i in 0...index do
+      for i in 0...idx do
         node = node.next
       end
     else
       node = self.tail
-      for i in 0...(self.length) -1 - index do
+      for i in 0...(self.length) -1 - idx do
         node = node.prev
       end
     end
     return node
+  end
+
+  def set(idx, val)
+    node = self.get(idx)
+    if node
+      node.val = val
+    end
+    return !!node
+  end
+
+  def insert(idx, val)
+    if idx < 0 || idx >= self.length
+      return nil
+    end 
+
+    if idx == 0
+      return !!self.unshift(val)
+    elsif idx == self.length
+      return !!self.push(val)
+    end
+
+    new_node = Node.new(val)
+    prev_node = self.get(idx -1)
+    next_node = prev_node.next
+
+    new_node.next = next_node, next_node.prev = new_node
+    new_node.prev = prev_node, prev_node.next = new_node
+    
+    self.length += 1
+    return true
+  end
+
+  def remove(idx)
+    if idx < 0 || idx >= self.length
+      return nil
+    end
+
+    if idx == 0
+      return !!self.shift
+    elsif idx == (self.length) -1
+      return !!self.pop
+    end
+
+    removed = self.get(idx)
+    prev_node = removed.prev
+    next_node = removed.next
+
+    prev_node.next = next_node, next_node.prev = prev_node
+    removed.next = nil, removed.prev = nil
+
+    self.length -=1
+    return removed
   end
 
 end
@@ -131,3 +191,5 @@ list.push(15)
 list.push(20)
 list.push(25)
 list.push(30)
+p list.remove(2)
+p list
