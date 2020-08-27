@@ -85,6 +85,41 @@ class DoublyLinkedList
      end
      self.length -= 1
      return removed
+  end 
+
+  def unshift(val)
+    node = Node.new(val)
+
+    if !self.head
+      self.head = node
+      self.tail = node
+    else
+      node.next = self.head
+      self.head.prev = node
+      self.head = node
+    end
+
+    self.length += 1
+    return self
+  end
+
+  def get(index)
+    if index < 0 || index >= self.length
+      return nil
+    end
+    # either start at beginning or end depending on index. Halves search time
+    if index < (self.length) / 2
+      node = self.head
+      for i in 0...index do
+        node = node.next
+      end
+    else
+      node = self.tail
+      for i in 0...(self.length) -1 - index do
+        node = node.prev
+      end
+    end
+    return node
   end
 
 end
@@ -92,4 +127,7 @@ end
 list = DoublyLinkedList.new
 list.push(5)
 list.push(10)
-p list.pop
+list.push(15)
+list.push(20)
+list.push(25)
+list.push(30)
