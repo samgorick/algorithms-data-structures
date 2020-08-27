@@ -109,7 +109,24 @@ class SinglyLinkedList
     if node
       node.val = val
     end
-    return node
+    return !!node
+  end
+
+  def insert(val, idx)
+    if idx > self.length || idx < 0
+      return false
+    elsif idx == 0
+      return !!self.unshift(val)
+    elsif idx == self.length
+      return !!self.push(val)
+    else
+      new_node = Node.new(val)
+      new_node.next = self.get(idx)
+      prev_node = self.get(idx -1)
+      prev_node.next = new_node
+      self.length += 1
+    end
+    return !!new_node
   end
 
 end
@@ -118,8 +135,5 @@ test = SinglyLinkedList.new
 test.push(15)
 test.push(20)
 test.push(25)
-test.unshift(1000)
-p test
-p test.get(2)
-test.set(500, 3)
+test.insert(1000, 0)
 p test
