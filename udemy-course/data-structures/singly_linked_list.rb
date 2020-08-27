@@ -1,3 +1,12 @@
+# Big O of Singly Linked Lists:
+
+# Excels at insertion and removal times, especially at the beginning
+# Not as good as arrays at random access to elements
+# Insertion: O(1)
+# Removal: Depends. O(1) or O(N) depending on start/end removal
+# Searching: O(N)
+# Access: O(N)
+
 class Node
 
   attr_accessor :val, :next
@@ -12,7 +21,7 @@ class SinglyLinkedList
 
   attr_accessor :length, :head, :tail
   
-  def initialize()
+  def initialize
     @length = 0
     @head = nil
     @tail = nil
@@ -127,6 +136,44 @@ class SinglyLinkedList
       self.length += 1
     end
     return !!new_node
+  end
+
+  def remove(idx)
+    if idx < 0 || idx >= self.length
+      return false
+    elsif idx == self.length - 1
+      return !!self.pop
+    elsif idx == 0
+      return !!self.shift
+    else
+      prev_node = self.get(idx -1)
+      removed = prev_node.next
+      prev_node.next = self.get(idx +1)
+      self.length -= 1
+      return removed
+    end
+  end
+
+  def reverse
+    if self.length == 0
+      return nil
+    elsif self.length == 1
+      return self
+    end
+    node = self.head
+    self.head = self.tail
+    self.tail = node
+
+    prev = nil
+    nxt = nil
+
+    for i in 0...self.length do
+      nxt = node.next
+      node.next = prev
+      prev = node
+      node = nxt
+    end
+    return self
   end
 
 end
