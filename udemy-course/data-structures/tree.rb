@@ -68,6 +68,32 @@ class BinarySearchTree
       end
     end
   end
+
+  def find(val)
+    if !self.root
+      return false
+    end
+
+    current = self.root
+    while true
+      if current.value == val
+        return true
+      end
+      if val < current.value
+        if !current.left
+          return false
+        else
+          current = current.left
+        end
+      elsif val > current.value
+        if !current.right
+          return false
+        else
+          current = current.right
+        end
+      end
+    end
+  end
 end
 
 tree = BinarySearchTree.new
@@ -78,5 +104,8 @@ tree.insert(11)
 tree.insert(2)
 tree.insert(16)
 tree.insert(7)
-tree.insert(10)
-p tree
+p tree.find(7)
+
+#           10
+#      5          13
+#   2     7    11     16
