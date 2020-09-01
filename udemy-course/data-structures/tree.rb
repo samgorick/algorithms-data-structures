@@ -17,6 +17,10 @@
 # Every item on the right of a node is greater
 # Excel at sorting/accessing data that can be sortable
 
+# Big O of BST
+# Insert - O(log n) - average case
+# Searching - O(log n) - average case
+
 class Node
   attr_accessor :value, :left, :right
 
@@ -75,24 +79,41 @@ class BinarySearchTree
     end
 
     current = self.root
-    while true
-      if current.value == val
-        return true
-      end
-      if val < current.value
-        if !current.left
-          return false
-        else
-          current = current.left
-        end
-      elsif val > current.value
-        if !current.right
-          return false
-        else
-          current = current.right
-        end
+    found = false
+    while current && !found
+      if current.value > val
+        current = current.left
+      elsif current.value < val
+        current = current.right
+      else
+        return true # could also return current (node)
       end
     end
+    return false
+  end
+
+  def breadthFirstSearch
+    # create a queue and a variable to store value of nodes visited
+    queue = []
+    result = []
+    # Place root node in the queue
+    queue.push(self.root)
+    # Loop as long as there is anything in the queue
+    while queue.length > 0
+    # Dequeue a node from the queue and push the value of the node into the variable that stores the nodes
+      node = queue.shift
+      result << node.value
+    # If there is a left property on node dequeued add it to queue
+      if node.left
+        queue.push(node.left)
+      end
+    # If there is a right property on the node dequeued - add it to queue
+      if node.right
+        queue.push(node.right)
+      end
+    end
+    # Return variable that stores the values
+    return result
   end
 end
 
@@ -104,8 +125,10 @@ tree.insert(11)
 tree.insert(2)
 tree.insert(16)
 tree.insert(7)
-p tree.find(7)
+
+otherTree = BinarySearchTree.new
+p otherTree.breadthFirstSearch
 
 #           10
 #      5          13
-#   2     7    11     16
+#   2     7    11     16 
