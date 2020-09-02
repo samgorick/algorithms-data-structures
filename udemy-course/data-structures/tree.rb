@@ -115,6 +115,44 @@ class BinarySearchTree
     # Return variable that stores the values
     return result
   end
+
+  # Add node value to result as soon as visited
+  def depthFirstSearchPreOrder
+    # create result variable to store values of nodes visited
+    @result = []
+    # Helper function that accepts a node
+    def traverse(node)
+      # Push value of node to the variable that stores the values
+      @result.push(node.value)
+      # If the node has a left property, call helper function with left property of node
+      traverse(node.left) if node.left 
+      # If node has right property, called helper function with right property of node
+      traverse(node.right) if node.right
+    end
+    # Invoke helper function with current variable
+    traverse(self.root)
+    # Return array of values
+    return @result
+  end
+
+  # Go all the way to the left and then right before adding node to result
+  def depthFirstSearchPostOrder
+    # create result variable to store values of nodes visited
+    @result = []
+    # Helper function that accepts a node
+    def traverse(node)
+      # If the node has a left property, call helper function with left property of node
+      traverse(node.left) if node.left 
+      # If node has right property, called helper function with right property of node
+      traverse(node.right) if node.right
+      # Push value of node to the variable that stores the values
+      @result.push(node.value)
+    end
+    # Invoke helper function with current variable
+    traverse(self.root)
+    # Return array of values
+    return @result
+  end
 end
 
 tree = BinarySearchTree.new
@@ -125,9 +163,7 @@ tree.insert(11)
 tree.insert(2)
 tree.insert(16)
 tree.insert(7)
-
-otherTree = BinarySearchTree.new
-p otherTree.breadthFirstSearch
+p tree.depthFirstSearchPostOrder
 
 #           10
 #      5          13

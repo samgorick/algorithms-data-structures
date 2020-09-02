@@ -59,7 +59,7 @@ end
 
 # Solved recursively. Includes start and finish as arguments, otherwise is similar to above.
 def recursive_binary(array, start, finish, search)
-  if finish > start
+  if finish < start
     return -1
   end
   bisection = (start + finish) / 2
