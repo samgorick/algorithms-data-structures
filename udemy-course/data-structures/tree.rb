@@ -21,6 +21,16 @@
 # Insert - O(log n) - average case
 # Searching - O(log n) - average case
 
+# Breadth First Search vs Depth First Search?
+# Basically - breadth tree - use depth! Deep tree - use breadth!
+# Fully fleshed out tree? Don't want to store all the nodes yet to visit in breadth first! Depth probably better
+# If deep rather than wide - breadth first is bette
+
+# Depth first - pre-order, post-order, in-order?
+# In order - the nodes are IN ORDER. From low to high
+# PreOrder - Starts with root, and can recreate easily
+# PostOrder - who knows why this would be useful 
+
 class Node
   attr_accessor :value, :left, :right
 
@@ -137,20 +147,29 @@ class BinarySearchTree
 
   # Go all the way to the left and then right before adding node to result
   def depthFirstSearchPostOrder
-    # create result variable to store values of nodes visited
     @result = []
-    # Helper function that accepts a node
+
     def traverse(node)
-      # If the node has a left property, call helper function with left property of node
       traverse(node.left) if node.left 
-      # If node has right property, called helper function with right property of node
       traverse(node.right) if node.right
-      # Push value of node to the variable that stores the values
-      @result.push(node.value)
+      @result << node.value
     end
-    # Invoke helper function with current variable
+
     traverse(self.root)
-    # Return array of values
+    return @result
+  end
+
+  # Once left side is traversed, push node, then traverse right
+  def depthFirstSearchInOrder
+    @result = []
+
+    def traverse(node)
+      traverse(node.left) if node.left
+      @result << node.value
+      traverse(node.right) if node.right
+    end
+
+    traverse(self.root)
     return @result
   end
 end
@@ -163,7 +182,7 @@ tree.insert(11)
 tree.insert(2)
 tree.insert(16)
 tree.insert(7)
-p tree.depthFirstSearchPostOrder
+p tree.depthFirstSearchInOrder
 
 #           10
 #      5          13
