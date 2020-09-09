@@ -45,7 +45,6 @@ class MaxBinaryHeap
     def sinkDown
       parentIndex = 0
       element = self.values[parentIndex]
-      max_child = nil
 
       while true
         left_child_idx = 2 * parentIndex + 1
@@ -124,6 +123,44 @@ class PriorityQueue
   end
 
   def dequeue
+    # helper method invoked below
+  def sinkDown
+    parentIndex = 0
+    element = self.values[parentIndex]
+
+    while true
+      left_child_idx = 2 * parentIndex + 1
+      right_child_idx = 2 * parentIndex + 2
+      swap = nil
+
+      if left_child_idx < self.values.length
+        left_child = self.values[left_child_idx]
+        if left_child.priority < element.priority
+          swap = left_child_idx
+        end
+      end
+
+      if right_child_idx < self.values.length
+        right_child = self.values[right_child_idx]
+        if swap == nil && right_child.priority < element.priority || swap != nil && right_child.priority < left_child.priority
+          swap = right_child_idx
+        end
+      end
+
+      break if swap == nil
+      self.values[parentIndex] = self.values[swap]
+      self.values[swap] = element
+      parentIndex = swap
+    end
+  end
+
+  min = self.values[0]
+  last = self.values.pop
+  if self.values.length > 0
+    self.values[0] = last
+    self.sinkDown
+  end
+  return min
   end
 
 end
@@ -133,4 +170,6 @@ priority.enqueue(15, 3)
 priority.enqueue(20, 2)
 priority.enqueue(25, 1)
 priority.enqueue(20, 5)
+p priority
+p priority.dequeue
 p priority
