@@ -53,7 +53,7 @@
     return self.size += 1
   end
 
-  def dequeue()
+  def dequeue
     if self.size == 0
       return nil
     end

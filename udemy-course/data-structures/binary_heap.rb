@@ -8,7 +8,7 @@
 # Binary heap is as compact as possible, all children of each node are as full as they can be
 # MinBinaryHeap - child nodes are always larger than their parent node
 
-# For any index of an array - n
+# For any index of an array at position n
 # Left child is 2n + 1
 # Right child is 2n + 2
 
@@ -23,6 +23,7 @@ class MaxBinaryHeap
     @values = []
   end
 
+  # Insert at end, swap to move to correct position in heap
   def insert(val)
     self.values << val
     index = (self.values.length) - 1
@@ -40,37 +41,43 @@ class MaxBinaryHeap
 
   # remove largest and sink down remainder
   def extractMax
-    last = (self.values.length) - 1
-    self.values[0], self.values[last] = self.values[last], self.values[0]
-    max = self.values.pop
+    # helper method invoked below
+    def sinkDown
+      parentIndex = 0
+      element = self.values[parentIndex]
+      max_child = nil
 
-    parentIndex = 0
-    element = self.values[parentIndex]
-    max_child = nil
+      while true
+        left_child_idx = 2 * parentIndex + 1
+        right_child_idx = 2 * parentIndex + 2
+        swap = nil
 
-    while true
-      left_child_idx = 2 * parentIndex + 1
-      right_child_idx = 2 * parentIndex + 2
-      swap = nil
-
-      if left_child_idx < self.values.length
-        left_child = self.values[left_child_idx]
-        if left_child > element
-          swap = left_child_idx
+        if left_child_idx < self.values.length
+          left_child = self.values[left_child_idx]
+          if left_child > element
+            swap = left_child_idx
+          end
         end
-      end
 
-      if right_child_idx < self.values.length
-        right_child = self.values[right_child_idx]
-        if swap == nil && right_child > element || swap != nil && right_child > left_child
-          swap = right_child_idx
+        if right_child_idx < self.values.length
+          right_child = self.values[right_child_idx]
+          if swap == nil && right_child > element || swap != nil && right_child > left_child
+            swap = right_child_idx
+          end
         end
-      end
 
-      break if swap == nil
-      self.values[parentIndex] = self.values[swap]
-      self.values[swap] = element
-      parentIndex = swap
+        break if swap == nil
+        self.values[parentIndex] = self.values[swap]
+        self.values[swap] = element
+        parentIndex = swap
+      end
+    end
+
+    max = self.values[0]
+    last = self.values.pop
+    if self.values.length > 0
+      self.values[0] = last
+      self.sinkDown
     end
     return max
   end
@@ -82,6 +89,48 @@ heap.insert(20)
 heap.insert(15)
 heap.insert(25)
 heap.insert(12)
-p heap
-p heap.extractMax
-p heap
+
+class Node
+  attr_accessor :value, :priority 
+
+  def initialize(value, priority)
+    @value = value
+    @priority = priority
+  end
+end
+
+# Will use a MinHeap as lower numbers are more important
+class PriorityQueue
+  attr_accessor :values
+
+  def initialize
+    @values = []
+  end
+
+  def enqueue(value, priority)
+    node = Node.new(value, priority)
+    self.values << node
+    index = (self.values.length) - 1
+    while index > 0
+      parentIndex = (index - 1) / 2
+      if self.values[parentIndex].priority <= self.values[index].priority
+        break
+      else
+        self.values[parentIndex], self.values[index] = self.values[index], self.values[parentIndex]
+        index = parentIndex
+      end
+    end
+    self.values
+  end
+
+  def dequeue
+  end
+
+end
+
+priority = PriorityQueue.new
+priority.enqueue(15, 3)
+priority.enqueue(20, 2)
+priority.enqueue(25, 1)
+priority.enqueue(20, 5)
+p priority
